@@ -303,7 +303,8 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     /* check if both genes already enumerated in previous blocks */
     bool flag = true;
     /* speed up the program if the rows bigger than 200 */
-    if (rows > 250) {
+   /*if (rows > 250) {*/
+    if (rows >200){
       if (allincluster.find(e->gene_one) != allincluster.end() && allincluster.find(e->gene_two) != allincluster.end()) flag = false;
     } else flag = internal::check_seed(e, bb, rows);
     if (!flag) continue;
