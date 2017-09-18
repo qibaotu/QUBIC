@@ -98,8 +98,10 @@ static bool check_seed(const Edge* e, const std::vector<Block>& bb, std::size_t 
   std::size_t b1, b2;
   std::size_t b3;
   for (std::size_t i = 0; i < block_id; i++)
-    if (bb[i].contains(e->gene_one) && bb[i].contains(e->gene_two))
+    /*if (bb[i].contains(e->gene_one) && bb[i].contains(e->gene_two))*/  /*comment out 0918 xiej*/
+    if (bb[i].contains(e->gene_one) || bb[i].contains(e->gene_two))  /*add 0918 xiej*/
       return false;
+  /*
   std::vector<int> profiles(rows, 0);
   bool fg = false;
   for (std::size_t i = 0; i < block_id; i++)
@@ -129,6 +131,7 @@ static bool check_seed(const Edge* e, const std::vector<Block>& bb, std::size_t 
     if (profiles[index] > 1) return false;
   b3 = std::max(bb[b1].block_cols(), bb[b2].block_cols());
   return e->score - b3 >= 0;
+  */   /* comment out 0918 xiej */
 }
 
 static long double get_pvalue(const continuous& a, const int& b) {
@@ -242,8 +245,7 @@ static std::vector<Block> report_blocks(std::vector<Block> bb, int RPT_BLOCK, do
                           count_intersect(output[k].genes_reverse, b_ptr.genes_order) +
                           count_intersect(output[k].genes_reverse, b_ptr.genes_reverse);
       double inter_cols = count_intersect(output[k].conds, b_ptr.conds);
-      /*if (inter_rows * inter_cols > FILTER * cur_rows * cur_cols) {*/
-      if (inter_rows > FILTER*cur_rows|| inter_cols>FILTER*cur_cols){
+      if (inter_rows * inter_cols > FILTER * cur_rows * cur_cols) {
         flag = false;
         break;
       }
