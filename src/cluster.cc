@@ -336,7 +336,7 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     for (std ::size_t row =0; row < rows ; row ++) {
       for (std::size_t i =0; i < block_id; i++){
         if (bb[i].contains(row))
-          candidtes[row] = false;
+          candidates[row] = false;
       }
     }
     /*end add 0918 xiej */
