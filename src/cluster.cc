@@ -296,6 +296,7 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
                            std::size_t COL_WIDTH, double TOLERANCE, bool IS_cond, bool IS_area,
                            bool IS_pvalue, std::size_t SCH_BLOCK, int RPT_BLOCK, double FILTER, double f, bool verbose) {
   std::vector<Block> bb;
+  std::size_t block_id = bb.size();  /*add 0919 xiej*/
   std::size_t rows = all.list.size();
   std::size_t cols = all.list[0].size();
 
@@ -331,6 +332,14 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     /* maintain a candidate list to avoid looping through all rows */
     std::vector<char> candidates(rows, true);
     candidates[e->gene_one] = candidates[e->gene_two] = false;
+    /* add 0918 xiej  */
+    for (std ::size_t row =0; row < rows ; row ++) {
+      for (std::size_t i =0; i < block_id; i++){
+        if (bb[i].contains(row))
+          candidtes[row] = false;
+      }
+    }
+    /*end add 0918 xiej */
     std::size_t components = 2;
     /* expansion step, generate a bicluster without noise */
     std::vector<long double> pvalues;
