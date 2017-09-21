@@ -169,13 +169,13 @@ static void block_init(const DiscreteArrayList& arr_c, Block& b,
   /*we just get the largest 100 rows when we initial a bicluster because we believe that
   * the 100 rows can characterize the structure of the bicluster
   * btw, it can reduce the time complexity*/
-  if (rows > 100) {
+  /*if (rows > 100) {
     std::sort(arr_rows_b.begin(), arr_rows_b.end());
     top = arr_rows_b[rows - 100];
     for (std::size_t i = 0; i < rows; i++)
       if (arr_rows[i] < top)
         candidates[i] = false;
-  }
+  }*/
   /*calculate the condition low bound for current seed*/
   int cutoff = static_cast<int>(0.05 * rows);
   b.cond_low_bound = arr_rows_b[rows - cutoff - 1];
