@@ -296,7 +296,6 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
                            std::size_t COL_WIDTH, double TOLERANCE, bool IS_cond, bool IS_area,
                            bool IS_pvalue, std::size_t SCH_BLOCK, int RPT_BLOCK, double FILTER, double f, bool verbose) {
   std::vector<Block> bb;
-  std::size_t block_id = bb.size();  /*add 0919 xiej*/
   std::size_t rows = all.list.size();
   std::size_t cols = all.list[0].size();
 
@@ -307,7 +306,10 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     bool flag = true;
     /* speed up the program if the rows bigger than 200 */
     if (rows > 250) {
-      if (allincluster.find(e->gene_one) != allincluster.end() && allincluster.find(e->gene_two) != allincluster.end()) flag = false;
+      /*  modify 0920 xiej*/
+      /*if (allincluster.find(e->gene_one) != allincluster.end() && allincluster.find(e->gene_two) != allincluster.end()) flag = false;*/
+      if (allincluster.find(e->gene_one) != allincluster.end() || allincluster.find(e->gene_two) != allincluster.end()) flag = false;
+      /* end modify 0920 */
     } else flag = internal::check_seed(e, bb, rows);
     if (!flag) continue;
     std::vector<std::vector<bits16>> profile(cols, std::vector<bits16>(all.symbols.size(), 0));
@@ -333,7 +335,8 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     std::vector<char> candidates(rows, true);
     candidates[e->gene_one] = candidates[e->gene_two] = false;
     /* add 0918 xiej  */
-    for (std ::size_t row =0; row < rows ; row ++) {
+    std::size_t block_id = bb.size();
+    for (std::size_t row =0; row < rows ; row ++) {
       for (std::size_t i =0; i < block_id; i++){
         if (bb[i].contains(row))
           candidates[row] = false;
@@ -354,6 +357,14 @@ std::vector<Block> cluster(const DiscreteArrayListWithSymbols& all, const std::v
     }
     components = k + 1;
     std::fill(candidates.begin(), candidates.end(), true);
+    /* add 0918 xiej  */
+    for (std::size_t row =0; row < rows ; row ++) {
+      for (std::size_t i =0; i < block_id; i++){
+        if (bb[i].contains(row))
+          candidates[row] = false;
+      }
+    }
+    /*end add 0918 xiej */
     for (std::size_t ki = 0; ki < components - 1; ki++) {
       internal::seed_update(all.list[genes_order[ki]], profile);
       candidates[genes_order[ki]] = false;
